@@ -1,7 +1,7 @@
 package fr.omg.admiralis.mscourse.courses;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.omg.admiralis.mscourse.courses.dto.CourseCompletDto;
+import fr.omg.admiralis.mscourse.courses.dto.CourseFullDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,21 +20,21 @@ public class CourseController {
 
 
     @GetMapping
-    public List<CourseCompletDto> findAll() {
+    public List<CourseFullDto> findAll() {
         List<Course> courses = courseService.findAll();
-        return courses.stream().map(course -> objectMapper.convertValue(course, CourseCompletDto.class)).toList();
+        return courses.stream().map(course -> objectMapper.convertValue(course, CourseFullDto.class)).toList();
     }
 
     @PostMapping
-    public CourseCompletDto save(@RequestBody Course newCourse) {
+    public CourseFullDto save(@RequestBody Course newCourse) {
         Course course =  courseService.save(newCourse);
-        return objectMapper.convertValue(course, CourseCompletDto.class);
+        return objectMapper.convertValue(course, CourseFullDto.class);
     }
 
     @GetMapping("/{id}")
-    public CourseCompletDto findById(@PathVariable String id) {
+    public CourseFullDto findById(@PathVariable String id) {
         Course course = courseService.findById(id);
-        return objectMapper.convertValue(course, CourseCompletDto.class);
+        return objectMapper.convertValue(course, CourseFullDto.class);
     }
 
     public void deleteById(String id) {

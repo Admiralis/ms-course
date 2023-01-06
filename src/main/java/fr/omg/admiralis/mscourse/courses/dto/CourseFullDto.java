@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class CourseCompletDto {
+public class CourseFullDto {
     private String id;
     private String label;
     private LocalDate startDate;
