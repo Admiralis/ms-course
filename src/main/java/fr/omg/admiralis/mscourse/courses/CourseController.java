@@ -19,24 +19,42 @@ public class CourseController {
     }
 
 
+    /**
+     * Retourne toutes les formations
+     * @return
+     */
     @GetMapping
     public List<CourseFullDto> findAll() {
         List<Course> courses = courseService.findAll();
         return courses.stream().map(course -> objectMapper.convertValue(course, CourseFullDto.class)).toList();
     }
 
+    /**
+     * Ajoute une nouvelle formation
+     * @param newCourse à ajouter
+     * @return la formation ajoutée
+     */
     @PostMapping
     public CourseFullDto save(@RequestBody Course newCourse) {
         Course course =  courseService.save(newCourse);
         return objectMapper.convertValue(course, CourseFullDto.class);
     }
 
+    /**
+     * Retourne une formation par son id
+     * @param id de la formation
+     * @return la formation demandée
+     */
     @GetMapping("/{id}")
     public CourseFullDto findById(@PathVariable String id) {
         Course course = courseService.findById(id);
         return objectMapper.convertValue(course, CourseFullDto.class);
     }
 
+    /**
+     * Supprime une formation par son id
+     * @param id de la formation
+     */
     public void deleteById(String id) {
         courseService.deleteById(id);
     }
