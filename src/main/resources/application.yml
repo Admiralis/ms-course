@@ -3,3 +3,6 @@ spring:
     mongodb:
       uri: mongodb://mongoadmin:secret@localhost:27017/courses?authSource=admin
       database: courses
+springdoc:
+  swagger-ui:
+    path: /api-docs
