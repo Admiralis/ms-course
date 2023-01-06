@@ -1,9 +1,5 @@
 spring:
   data:
     mongodb:
-      host: course-db
-      port: 27017
+      uri: mongodb://mongoadmin:secret@localhost:27017/courses?authSource=admin
       database: courses
-      username: mongoadmin
-      password: secret
-      authentication-database: admin
