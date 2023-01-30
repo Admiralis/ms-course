@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,9 @@ public class CourseService {
      * @return la formation ajoutée
      */
     public Course save(Course course) {
+        if (course.getStartDate() == null) {
+            course.setStartDate(LocalDate.now());
+        }
         return courseRepository.save(course);
     }
 
