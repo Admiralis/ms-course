@@ -1,5 +1,6 @@
 package fr.omg.admiralis.mscourse.students;
 
+import fr.omg.admiralis.mscourse.courses.Course;
 import fr.omg.admiralis.mscourse.courses.CourseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,12 +29,10 @@ public class StudentService {
 
     /**
      * Remplace l'id du cours par l'objet cours
-     * @param student étudiant à modifier
+     * @param courseId : Id du cours à chercher
      */
-    private void populateCourse(Student student) {
-        if (student.getCourse().getId() != null) {
-            student.setCourse(courseService.findById(student.getCourse().getId()));
-        }
+    private Course findCourse(String courseId) {
+            return courseService.findById(courseId);
     }
 
     /**
@@ -43,7 +42,9 @@ public class StudentService {
      */
     public Student save(Student student) {
         student = studentRepository.save(student);
-        populateCourse(student);
+        if (student.getCourse() != null) {
+            student.setCourse(findCourse(student.getCourse().getId()));
+        }
         return student;
     }
 
