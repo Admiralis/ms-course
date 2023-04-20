@@ -33,7 +33,10 @@ public class CourseService {
         if (course.getStartDate() == null) {
             course.setStartDate(LocalDate.now());
         }
-        return courseRepository.save(course);
+
+        Optional<Course> existingCourse = courseRepository.findByLabelAndStartDate(course.getLabel(), course.getStartDate());
+        return existingCourse.orElseGet(() -> courseRepository.save(course));
+
     }
 
     /**
@@ -51,5 +54,13 @@ public class CourseService {
      */
     public void deleteById(String id) {
         courseRepository.deleteById(id);
+    }
+
+    public Course findByLabelAndStartDate(String label, LocalDate startDate) {
+        Course courses = courseRepository.findByLabelAndStartDate(label, startDate).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        if (courses == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return courses;
     }
 }

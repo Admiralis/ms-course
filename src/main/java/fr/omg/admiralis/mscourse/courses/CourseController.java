@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.omg.admiralis.mscourse.courses.dto.CourseFullDto;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -55,7 +56,14 @@ public class CourseController {
      * Supprime une formation par son id
      * @param id de la formation
      */
-    public void deleteById(String id) {
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable String id) {
         courseService.deleteById(id);
+    }
+
+    @GetMapping("/search")
+    public CourseFullDto findByLabelAndStartDate(@RequestParam String label, @RequestParam LocalDate startDate) {
+        Course course = courseService.findByLabelAndStartDate(label, startDate);
+        return objectMapper.convertValue(course, CourseFullDto.class);
     }
 }
