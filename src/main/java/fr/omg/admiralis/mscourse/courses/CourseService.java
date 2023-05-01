@@ -57,10 +57,27 @@ public class CourseService {
     }
 
     public Course findByLabelAndStartDate(String label, LocalDate startDate) {
-        Course courses = courseRepository.findByLabelAndStartDate(label, startDate).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Course courses = courseRepository.findByLabelAndStartDate(label, startDate).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
         if (courses == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         }
         return courses;
     }
+
+    public List<Course> findByEndDateAfterOrEndDateIsNull(LocalDate endDate) {
+        List<Course> courses = courseRepository.findByEndDateAfterOrEndDateIsNull(endDate).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
+        if (courses == null) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        }
+        return courses;
+    }
+
+    public List<Course> findByEndDateAfterOrEndDateIsNullAndLabelContainingIgnoreCase(LocalDate endDate, String label) {
+        List<Course> courses = courseRepository.findByEndDateAfterOrEndDateIsNullAndLabelContainingIgnoreCase(endDate, label).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
+        if (courses == null) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        }
+        return courses;
+    }
+
 }
