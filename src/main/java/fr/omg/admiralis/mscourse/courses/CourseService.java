@@ -73,10 +73,8 @@ public class CourseService {
     }
 
     public List<Course> findByEndDateAfterOrEndDateIsNullAndLabelContainingIgnoreCase(LocalDate endDate, String label) {
-        List<Course> courses = courseRepository.findByEndDateAfterOrEndDateIsNullAndLabelContainingIgnoreCase(endDate, label).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
-        if (courses == null) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        }
+        List<Course> courses = courseRepository.findByLabelContainingIgnoreCase(label).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
+        courses = courses.stream().filter(course -> course.getEndDate() == null || course.getEndDate().isAfter(endDate)).toList();
         return courses;
     }
 

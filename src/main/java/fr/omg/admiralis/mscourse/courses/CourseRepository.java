@@ -10,6 +10,6 @@ public interface CourseRepository extends MongoRepository<Course, String> {
     Optional<Course> findByLabelAndStartDate(String label, LocalDate startDate);
     Optional<List<Course>> findByEndDateAfterOrEndDateIsNull(LocalDate endDate);
 
-    Optional<List<Course>> findByEndDateAfterOrEndDateIsNullAndLabelContainingIgnoreCase(LocalDate endDate, String label);
+    Optional<List<Course>> findByLabelContainingIgnoreCase(String label);
 
 }
