@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,13 @@ public class CourseService {
      * @return la formation ajoutée
      */
     public Course save(Course course) {
-        return courseRepository.save(course);
+        if (course.getStartDate() == null) {
+            course.setStartDate(LocalDate.now());
+        }
+
+        Optional<Course> existingCourse = courseRepository.findByLabelAndStartDate(course.getLabel(), course.getStartDate());
+        return existingCourse.orElseGet(() -> courseRepository.save(course));
+
     }
 
     /**
@@ -48,4 +55,27 @@ public class CourseService {
     public void deleteById(String id) {
         courseRepository.deleteById(id);
     }
+
+    public Course findByLabelAndStartDate(String label, LocalDate startDate) {
+        Course courses = courseRepository.findByLabelAndStartDate(label, startDate).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
+        if (courses == null) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        }
+        return courses;
+    }
+
+    public List<Course> findByEndDateAfterOrEndDateIsNull(LocalDate endDate) {
+        List<Course> courses = courseRepository.findByEndDateAfterOrEndDateIsNull(endDate).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
+        if (courses == null) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        }
+        return courses;
+    }
+
+    public List<Course> findByEndDateAfterOrEndDateIsNullAndLabelContainingIgnoreCase(LocalDate endDate, String label) {
+        List<Course> courses = courseRepository.findByLabelContainingIgnoreCase(label).orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT));
+        courses = courses.stream().filter(course -> course.getEndDate() == null || course.getEndDate().isAfter(endDate)).toList();
+        return courses;
+    }
+
 }

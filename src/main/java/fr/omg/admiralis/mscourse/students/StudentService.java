@@ -1,19 +1,22 @@
 package fr.omg.admiralis.mscourse.students;
 
+import fr.omg.admiralis.mscourse.courses.Course;
+import fr.omg.admiralis.mscourse.courses.CourseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final CourseService courseService;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, CourseService courseService) {
         this.studentRepository = studentRepository;
+        this.courseService = courseService;
     }
 
     /**
@@ -25,12 +28,24 @@ public class StudentService {
     }
 
     /**
-     * Ajoute un nouvel étudiant ou le met à jour si il existe déjà
+     * Remplace l'id du cours par l'objet cours
+     * @param courseId : Id du cours à chercher
+     */
+    private Course findCourse(String courseId) {
+            return courseService.findById(courseId);
+    }
+
+    /**
+     * Ajoute un nouvel étudiant ou le met à jour s'il existe déjà
      * @param student à ajouter ou modifier
      * @return l'étudiant ajouté ou modifié
      */
     public Student save(Student student) {
-        return studentRepository.save(student);
+        student = studentRepository.save(student);
+        if (student.getCourse() != null) {
+            student.setCourse(findCourse(student.getCourse().getId()));
+        }
+        return student;
     }
 
     /**

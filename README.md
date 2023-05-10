@@ -45,6 +45,11 @@ Student "*" o-- "0..1" Course
 
 ## API
 
+### Swagger
+
+Le swagger est disponible à l'adresse suivante :
+- http://localhost:8080/api-docs
+
 ### Course
 
 | Méthode | URL            | Description |

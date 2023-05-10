@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.omg.admiralis.mscourse.courses.dto.CourseFullDto;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -55,7 +56,30 @@ public class CourseController {
      * Supprime une formation par son id
      * @param id de la formation
      */
-    public void deleteById(String id) {
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable String id) {
         courseService.deleteById(id);
+    }
+
+    @GetMapping("/search")
+    public CourseFullDto findByLabelAndStartDate(@RequestParam String label, @RequestParam LocalDate startDate) {
+        Course course = courseService.findByLabelAndStartDate(label, startDate);
+        return objectMapper.convertValue(course, CourseFullDto.class);
+    }
+
+//    @GetMapping("/in-progress")
+//    public List<CourseFullDto> findInProgress() {
+//        List<Course> courses = courseService.findByEndDateAfterOrEndDateIsNull(LocalDate.now());
+//        return courses.stream().map(course -> objectMapper.convertValue(course, CourseFullDto.class)).toList();
+//    }
+
+    @GetMapping("/in-progress")
+    public List<CourseFullDto> findInProgressByLabel(@RequestParam(required = false) String label) {
+        if (label == null) {
+            List<Course> courses = courseService.findByEndDateAfterOrEndDateIsNull(LocalDate.now());
+            return courses.stream().map(course -> objectMapper.convertValue(course, CourseFullDto.class)).toList();
+        }
+        List<Course> courses = courseService.findByEndDateAfterOrEndDateIsNullAndLabelContainingIgnoreCase(LocalDate.now(), label);
+        return courses.stream().map(course -> objectMapper.convertValue(course, CourseFullDto.class)).toList();
     }
 }
