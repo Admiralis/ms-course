@@ -14,4 +14,4 @@ springdoc:
   swagger-ui:
     path: /api-docs
 server:
-    port: 8080
+    port: 80
