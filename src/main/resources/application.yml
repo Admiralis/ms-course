@@ -14,9 +14,9 @@ springdoc:
   swagger-ui:
     path: /api/courses/docs
   api-docs:
-      path: /api/courses/docs
+    path: /api/courses/docs
 server:
-    port: 8080
+  port: 8080
 management:
   endpoints:
     jmx:
