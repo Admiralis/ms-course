@@ -12,6 +12,17 @@ spring:
       quiet-period: 1s
 springdoc:
   swagger-ui:
-    path: /api-docs
+    path: /api/courses/docs
+  api-docs:
+      path: /api/courses/docs
 server:
     port: 8080
+management:
+  endpoints:
+    jmx:
+      exposure:
+        include: 'health,info'
+    web:
+      base-path: '/api/courses/status'
+      path-mapping:
+        health: /health
